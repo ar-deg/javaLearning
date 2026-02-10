@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class ReadObject {
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("people.bin"))) {
 
 

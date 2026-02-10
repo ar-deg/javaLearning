@@ -31,7 +31,7 @@ public class Arrays {
 
         }
         System.out.println();
-        System.out.println("Сумма элементов, кратных" + " " + k + " "+"," + "равна" + " " + sum);
+        System.out.println("Сумма элементов, кратных" + " " + k + " " + "," + "равна" + " " + sum);
 
         sc.close();
     }

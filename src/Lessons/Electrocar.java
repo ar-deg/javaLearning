@@ -37,7 +37,6 @@ public class Electrocar {
         SomeClass someObject = new SomeClass();
 
 
-
         System.out.println("Electrocar" + id + " is starting...");
     }
 

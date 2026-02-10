@@ -28,7 +28,7 @@ public class DoubleArrays5 {
                 if (j < n - i) {
                     matrice[i][j] = i + 1;
                 }
-                System.out.print(matrice [i][j]+ " ");
+                System.out.print(matrice[i][j] + " ");
             }
             System.out.println();
         }
