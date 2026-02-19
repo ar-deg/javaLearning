@@ -10,24 +10,16 @@ public class SortArray1 {
         int[] mass1 = {1, 2, 3, 4, 5, 6, 12, 15, 7};
         int[] mass2 = {8, 9, 10, 11};
         int k = 5;
-        int[]  massNew = new int[mass1.length+mass2.length]; //длина общего массива
-        for(int i =0; i<k; i++){
+        int[] massNew = new int[mass1.length + mass2.length]; //длина общего массива
+        for (int i = 0; i < k; i++) {
             massNew[i] = mass1[i];  //заполнили общий массив элементами первого массива до k
         }
-        for( int i = 0; i<mass2.length; i++){
-            massNew[k+i]=mass2[i];    //добавили массив2
+        for (int i = 0; i < mass2.length; i++) {
+            massNew[k + i] = mass2[i];    //добавили массив2
         }
-        for(int i = k; i< mass1.length; i++){
+        for (int i = k; i < mass1.length; i++) {
             //здесь нужно остаток mass1 поместить в хвост massNew
         }
-
-
-
-
-
-
-
-
 
 
     }

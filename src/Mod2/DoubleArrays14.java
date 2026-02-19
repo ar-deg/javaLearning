@@ -25,19 +25,23 @@ public class DoubleArrays14 {
             for (int i = 0; i < line; i++) {
                 if (count == j) {
                     matrice[i][j] = 0;
+                    System.out.println("1");
                 }
                 if (count < j) {
                     matrice[i][j] = 1;
+                    System.out.println("2");
                 }
                 if (count > j) {
                     matrice[i][j] = 0;
+                    System.out.println("3");
                 }
                 if (matrice[i][j] == 1) {
                     count++;
+                    System.out.println("3");
                 }
-                System.out.print(matrice[i][j] + " ");
+                //System.out.print(matrice[i][j] + " ");
             }
-            System.out.println();
+           // System.out.println();
         }
     }
 }
