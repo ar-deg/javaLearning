@@ -19,7 +19,7 @@ public class DoubleArrays16 {
         int indexJ = n / 2;
         for (int num = 1; num <= n * n; num++) {
             matrice[indexI][indexJ] = num;
-            //System.out.println("1. число"+ num+"в ячейке"+matrice[indexI][indexJ]);
+            System.out.println("1. число" + num + "в ячейке" + indexI + " " + indexJ);
             int tempI = indexI;
             int tempJ = indexJ;
             indexI--;      //уменьшаем значение i на 1 (шаг вверх)
