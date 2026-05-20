@@ -26,7 +26,7 @@ public class Classes10 {
         airlineInfo.findDaysOfTheWeek("Mon");
 
         System.out.println("Список рейсов для Mon, время вылета которых больше 11:00");
-        airlineInfo.departureTime("Mon",11,0);
+        airlineInfo.departureTime("Mon", 11, 0);
     }
 
 }

@@ -8,7 +8,7 @@ public class Airline {
     private int minOfDeparture;
     private String daysOfTheWeek;
 
-    public Airline(String destination, int flightNumber, String aircraftType, int hoursOfDeparture,int minOfDeparture, String daysOfTheWeek) {
+    public Airline(String destination, int flightNumber, String aircraftType, int hoursOfDeparture, int minOfDeparture, String daysOfTheWeek) {
         this.destination = destination;
         this.flightNumber = flightNumber;
         this.aircraftType = aircraftType;

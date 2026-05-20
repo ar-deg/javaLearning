@@ -16,8 +16,7 @@ public class RegularExpr4 {
         Matcher matcher = date.matcher(text);
         if (matcher.find()) {
             System.out.println(matcher.group());
-        }
-        else {
+        } else {
             System.out.println("null");
         }
 

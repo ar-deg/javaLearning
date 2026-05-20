@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class StringArr3 {
     public static void main(String[] args) {
 
-       Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("Введите строку:");
         String string = sc.nextLine();
 
@@ -23,7 +23,6 @@ public class StringArr3 {
             }
         }
         System.out.print("Количество цифр = " + count);
-
 
 
     }

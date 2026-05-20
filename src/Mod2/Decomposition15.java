@@ -56,11 +56,12 @@ public class Decomposition15 {
         }
         return counter;
     }
+
     public static int[] findElementsOfNewArr(int n) {
         int i = (int) Math.pow(10, n - 1);
         int k = 0;
         int mass[] = new int[findLengthOfNewArr(n)];
-        for(int j = 0; j< mass.length; j++){
+        for (int j = 0; j < mass.length; j++) {
             for (; i < (int) Math.pow(10, n); i++) {
                 if (findIncNums(incNums(i, n))) {
                     mass[j] = i;
@@ -69,14 +70,15 @@ public class Decomposition15 {
                 }
             }
             k++;
-            i=k;
+            i = k;
         }
         return mass;
     }
-    public static void showArr(int n){
-        if(checkNum(n)){
+
+    public static void showArr(int n) {
+        if (checkNum(n)) {
             int mass[] = findElementsOfNewArr(n);
-            for(int i = 0; i< mass.length; i++){
+            for (int i = 0; i < mass.length; i++) {
                 System.out.println(mass[i]);
             }
         }

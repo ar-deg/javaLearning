@@ -41,7 +41,7 @@ public class DoubleArrays14 {
                 }
                 //System.out.print(matrice[i][j] + " ");
             }
-           // System.out.println();
+            // System.out.println();
         }
     }
 }

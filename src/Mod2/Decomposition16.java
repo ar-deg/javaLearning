@@ -18,7 +18,7 @@ public class Decomposition16 {
 
     public static int findCounter(int number) {
         int counter = 0;
-        while (number !=0) {
+        while (number != 0) {
             int digit = number % 10;
             counter++;
             number = number / 10;
@@ -34,7 +34,7 @@ public class Decomposition16 {
     }
 
     public static boolean findOddDigits(int number) {
-        while (number !=0) {
+        while (number != 0) {
             int digit = number % 10;
             if (digit % 2 == 0) {
                 return false;
@@ -46,7 +46,7 @@ public class Decomposition16 {
 
     public static int findEvenDigits(int number) {
         int counter = 0;
-        while (number !=0) {
+        while (number != 0) {
             int digit = number % 10;
             if (digit % 2 == 0) {
                 counter++;
@@ -59,7 +59,7 @@ public class Decomposition16 {
     public static int findSumNumbers(int n) {
         int i = (int) Math.pow(10, n - 1);
         int sum = 0;
-        if (n !=0) {
+        if (n != 0) {
             if (checkDigitQuant(i, n)) {
                 for (; i < (int) Math.pow(10, n); i++) {
                     if (findOddDigits(i)) {
