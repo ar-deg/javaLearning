@@ -44,7 +44,7 @@ public class State {
     }
 
     public void printCentreOfRegion() {
-        for (Region region : this.regions) {
+        for (Region region : regions) {
             System.out.println("Центр " + region.getRegionName() + " области: " + region.getCentreOfRegion());
         }
     }
