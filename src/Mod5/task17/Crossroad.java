@@ -29,102 +29,125 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Crossroad {
     public Lock lock = new ReentrantLock();
-    Condition northWestCondition = lock.newCondition();
-    Condition sothEastCondition = lock.newCondition();
+    Condition diretcionCondition = lock.newCondition();
 
-    public void waitingForPass(Direction direction, TrafficLight trafficLight) {
+
+    public void waitingForPass(TrafficLight trafficLight) {
         lock.lock();
         try {
-            if (direction == Direction.NORTH_TO_WEST || direction == Direction.WEST_TO_NORTH) {
-                while (!trafficLight.currentColor.equals(TrafficLight.GREEN)) {
-                    try {
-                        northWestCondition.await();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            } else if (direction == Direction.EAST_TO_SOUTH || direction == Direction.SOUTH_TO_EAST) {
-                while (!trafficLight.currentColor.equals(TrafficLight.RED)) {
-                    try {
-                        sothEastCondition.await();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }
-
+            while (!trafficLight.currentColor.equals(TrafficLight.GREEN)) {
+                diretcionCondition.await();
             }
 
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         } finally {
             lock.unlock();
         }
     }
 
-}
 
+    public static void main(String[] args) throws InterruptedException {
+        Crossroad crossroad = new Crossroad();
+        TrafficLight trafficLight = new TrafficLight(crossroad, "GREEN");
+        Thread trafficLightThread = new Thread(trafficLight);
+        trafficLightThread.start();
 
-public static void main(String[] args) throws InterruptedException {
+        Car car1 = new Car("BMW", Direction.NORTH_TO_WEST, crossroad, trafficLight);
+        Thread carThread1 = new Thread(car1);
+        carThread1.start();
 
+        Car car2 = new Car("Audi", Direction.WEST_TO_NORTH, crossroad, trafficLight);
+        Thread carThread2 = new Thread(car2);
+        carThread2.start();
 
-}
+        Car car3 = new Car("Jeely", Direction.SOUTH_TO_EAST, crossroad, trafficLight);
+        Thread carThread3 = new Thread(car3);
+        carThread3.start();
 
-enum Direction {
-    NORTH_TO_WEST,
-    WEST_TO_NORTH,
-    SOUTH_TO_EAST,
-    EAST_TO_SOUTH;
-}
+        Car car4 = new Car("Lixiang", Direction.EAST_TO_SOUTH, crossroad, trafficLight);
+        Thread carThread4 = new Thread(car4);
+        carThread4.start();
 
-public static class TrafficLight implements Runnable {
-    public static final String GREEN = "GREEN";
-    public static final String YELLOW = "YELLOW";
-    public static final String RED = "RED";
+        trafficLightThread.interrupt();
 
-    public volatile String currentColor;
-    public final Crossroad crossroad;
-
-    public TrafficLight(Crossroad crossroad, String currentColor) {
-        this.crossroad = crossroad;
-        this.currentColor = currentColor;
     }
 
-    @Override
-    public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            if (currentColor.equals(GREEN)) {
-                System.out.println("Светофор: зеленый свет");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
+    enum Direction {
+        NORTH_TO_WEST,
+        WEST_TO_NORTH,
+        SOUTH_TO_EAST,
+        EAST_TO_SOUTH;
+    }
+
+    public static class TrafficLight implements Runnable {
+        public static final String GREEN = "GREEN";
+        public static final String YELLOW = "YELLOW";
+        public static final String RED = "RED";
+
+        public volatile String currentColor;
+        public final Crossroad crossroad;
+
+        public TrafficLight(Crossroad crossroad, String currentColor) {
+            this.crossroad = crossroad;
+            this.currentColor = currentColor;
+        }
+
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                if (currentColor.equals(GREEN)) {
+                    System.out.println("Светофор: зеленый свет");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                    crossroad.lock.lock();
+                    try {
+                        currentColor = YELLOW;
+                        crossroad.diretcionCondition.signalAll();
+                    } finally {
+                        crossroad.lock.unlock();
+                    }
+
+
+                } else if (currentColor.equals(YELLOW)) {
+                    System.out.println("Светофор: желтый свет");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                    crossroad.lock.lock();
+                    try {
+                        currentColor = RED;
+                        crossroad.diretcionCondition.signalAll();
+                    } finally {
+                        crossroad.lock.unlock();
+                    }
+
+
+                } else if (currentColor.equals(RED)) {
+                    System.out.println("Светофор: красный свет");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
+                    crossroad.lock.lock();
+                    try {
+                        currentColor = GREEN;
+                        crossroad.diretcionCondition.signalAll();
+                    } finally {
+                        crossroad.lock.unlock();
+                    }
+
+
                 }
-                currentColor = YELLOW;
-
-            } else if (currentColor.equals(YELLOW)) {
-                System.out.println("Светофор: желтый свет");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-
-                currentColor = RED;
-
-
-            } else if (currentColor.equals(RED)) {
-                System.out.println("Светофор: красный свет");
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
-                }
-                currentColor = GREEN;
-
-
             }
         }
     }
@@ -133,16 +156,20 @@ public static class TrafficLight implements Runnable {
         private String carMod;
         private Direction direction;
         private Crossroad crossroad;
+        private TrafficLight trafficLight;
 
-        public Car(String carMod, Direction direction, Crossroad crossroad) {
+        public Car(String carMod, Direction direction, Crossroad crossroad, TrafficLight trafficLight) {
             this.carMod = carMod;
             this.direction = direction;
             this.crossroad = crossroad;
+            this.trafficLight = trafficLight;
         }
 
         @Override
         public void run() {
-            //crossroad.waitingForPass();
+            crossroad.waitingForPass(trafficLight);
+            System.out.println("Машина " + carMod + " проезжает перекресток по направлению " + direction + " на " + trafficLight.currentColor + " свет ");
         }
     }
 }
+
