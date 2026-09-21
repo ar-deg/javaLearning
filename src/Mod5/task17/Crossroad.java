@@ -49,35 +49,46 @@ public class Crossroad {
 
     public static void main(String[] args) throws InterruptedException {
         Crossroad crossroad = new Crossroad();
-        TrafficLight trafficLight = new TrafficLight(crossroad, "GREEN");
-        Thread trafficLightThread = new Thread(trafficLight);
-        trafficLightThread.start();
+        TrafficLight trafficLightNS = new TrafficLight(crossroad, "GREEN", "Север-Юг");
+        Thread trafficLightThread1 = new Thread(trafficLightNS);
+        trafficLightThread1.start();
 
-        Car car1 = new Car("BMW", Direction.NORTH_TO_WEST, crossroad, trafficLight);
+        TrafficLight trafficLightWE = new TrafficLight(crossroad, "RED", "Запад-Восток");
+        Thread trafficLightThread2 = new Thread(trafficLightWE);
+        trafficLightThread2.start();
+
+
+        Car car1 = new Car("BMW", Direction.NORTH_TO_SOUTH, crossroad, trafficLightNS);
         Thread carThread1 = new Thread(car1);
         carThread1.start();
 
-        Car car2 = new Car("Audi", Direction.WEST_TO_NORTH, crossroad, trafficLight);
+
+        Car car2 = new Car("Audi", Direction.WEST_TO_EAST, crossroad, trafficLightWE);
         Thread carThread2 = new Thread(car2);
         carThread2.start();
 
-        Car car3 = new Car("Jeely", Direction.SOUTH_TO_EAST, crossroad, trafficLight);
+
+        Car car3 = new Car("Jeely", Direction.SOUTH_TO_NORTH, crossroad, trafficLightNS);
         Thread carThread3 = new Thread(car3);
         carThread3.start();
 
-        Car car4 = new Car("Lixiang", Direction.EAST_TO_SOUTH, crossroad, trafficLight);
+
+        Car car4 = new Car("Lixiang", Direction.EAST_TO_WEST, crossroad, trafficLightWE);
         Thread carThread4 = new Thread(car4);
         carThread4.start();
 
-        trafficLightThread.interrupt();
+        Thread.sleep(10000);
+        trafficLightThread1.interrupt();
+        trafficLightThread2.interrupt();
+
 
     }
 
     enum Direction {
-        NORTH_TO_WEST,
-        WEST_TO_NORTH,
-        SOUTH_TO_EAST,
-        EAST_TO_SOUTH;
+        NORTH_TO_SOUTH,
+        SOUTH_TO_NORTH,
+        WEST_TO_EAST,
+        EAST_TO_WEST;
     }
 
     public static class TrafficLight implements Runnable {
@@ -87,17 +98,19 @@ public class Crossroad {
 
         public volatile String currentColor;
         public final Crossroad crossroad;
+        public final String directioName;
 
-        public TrafficLight(Crossroad crossroad, String currentColor) {
+        public TrafficLight(Crossroad crossroad, String currentColor, String directioName) {
             this.crossroad = crossroad;
             this.currentColor = currentColor;
+            this.directioName = directioName;
         }
 
         @Override
         public void run() {
             while (!Thread.currentThread().isInterrupted()) {
                 if (currentColor.equals(GREEN)) {
-                    System.out.println("Светофор: зеленый свет");
+                    System.out.println("Светофор " + directioName + " : зеленый свет");
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -114,7 +127,7 @@ public class Crossroad {
 
 
                 } else if (currentColor.equals(YELLOW)) {
-                    System.out.println("Светофор: желтый свет");
+                    System.out.println("Светофор " + directioName + " : желтый свет");
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -131,7 +144,7 @@ public class Crossroad {
 
 
                 } else if (currentColor.equals(RED)) {
-                    System.out.println("Светофор: красный свет");
+                    System.out.println("Светофор " + directioName + " : красный свет");
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
@@ -145,8 +158,6 @@ public class Crossroad {
                     } finally {
                         crossroad.lock.unlock();
                     }
-
-
                 }
             }
         }
